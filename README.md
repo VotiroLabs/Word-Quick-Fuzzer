@@ -1,4 +1,4 @@
-i) Word Quick Fuzzer v 1.0
+Word Quick Fuzzer v 1.0
 =======================
 
     $$\      $$\           $$$$$$$$\ 
@@ -17,11 +17,11 @@ i) Word Quick Fuzzer v 1.0
 Word Quick Fuzzer is a [Microsoft Quick Fields list](https://support.office.com/en-us/article/list-of-field-codes-in-word-1ad6d91a-55a7-4a8d-b535-cf7888659a51) fuzzer aiming for Word Quick Fields, written in Python. 
 
 
-ii) Motivation
+Motivation
 =========================================
 There has yet to be a fuzzer aiming specifically for the Word Quick Fields. While this is some what of a niche, these fields pose a big risk as we've seen in DDE attacks and alike.
 
-iii) Dependencies
+Dependencies
 ==================
 MqF is written and tested on Python v2.7. it uses the following third party libraries
 
@@ -36,7 +36,7 @@ Since we feed random yet valid data into target application during fuzzing, targ
 
 				
 
-iv) Adding More POPUP / Errors Windows Handler
+Adding More POPUP / Errors Windows Handler
 ===============================================
 
 The default PopUpKiller.py file provided with Word Quick Fuzzer, is having few most occurred pop up / error windows handler for MS Word, MS Excel & Power Point. Using AutoIT Window Info tool (https://www.autoitscript.com/site/autoit/downloads/) you can add more POPUP / Errors Windows Handlers into 'PopUpKiller.py'.
@@ -50,7 +50,7 @@ if "PowerPoint found a problem with content"  in autoit.win_get_text('Microsoft 
 
 ```
 
-v)How it works
+How it works
 =============
 MqF launches Word with this document and then starts updating its Quick field using COM Update method.
 - The reason I chose this method is that it enables to only load Word once, saving a lot of process time. 
@@ -64,11 +64,12 @@ It is at this stage that the "autoupdating" link becomes important - the PopUp m
 
 
 
-vi) Execution
+Execution
 ===================
 This fuzzer is tested on 32 Bit and 64 Bit Windows Platforms (32 Bit Office Process). All the required libraries are distributed with this fuzzer in 'ExtDepLibs/' folder.
 
 
+~~~~
 python fuzzHTML.py
 
 
@@ -91,6 +92,7 @@ usage: HTMLfuzzer [-h] [-w WORD_FILE] [-r REF_FILE] [-n NUMBER_OF_FILES]
                   [-i INPUTS_DIR] [-o OUTPUT_DIR] [-v] [-d]
                   {analyze,fuzz}
 
+~~~~
 
 Basically, there are 2 modes of operation: analyze OR fuzz. This is the only required argument to the program.
 
@@ -105,6 +107,7 @@ The rest are predifined (but can be user supplied as well):
 
 ___________________________________________________________________________________
 
+~~~~
 python fuzzPics.py
 
 
@@ -126,6 +129,7 @@ python fuzzPics.py
 usage: ImageFuzzer [-h] [-w WORD_FILE] [-r REF_FILE] [-i INPUTS_DIR]
                    [-o OUTPUT_DIR] [-v] [-d]
                    {analyze,fuzz} inputs_dir
+~~~~
 
 Basically, there are 2 modes of operation: analyze OR fuzz.
 In addition, an inputs folder needs to be defined - Test this with [AFL generated images](http://lcamtuf.coredump.cx/afl/demo/).
@@ -141,10 +145,11 @@ The rest are predifined (but can be user supplied as well):
 Since MqF supports custom user files, you will be needing to take care to these features:
 1. create a document in Word, insert a Quick field of type INCLUDETEXT/INCLUDEPICTURE and point it to a non-existant html/image file path.
 - This non-existant file path should be provided to MqF in the "-r" argument, as it will be the generated symbolic link.
-2. Open the document with an archive unpacker and edit "word\document.xml": look for a tag containing "begin" and add w:dirty="true" -> it should look like this: <w:fldChar w:fldCharType="begin" w:dirty="true"/>
+2. Open the document with an archive unpacker and edit "word\document.xml": look for a tag containing "begin" and add w:dirty="true" -> it should look like this: `<w:fldChar w:fldCharType="begin" w:dirty="true"/>`
 3. Exit the text editor and make sure the edits are saved to the document. now you can supply its path to MqF in the "-w" argument.
 
-vii) Few More Points about Word Quick Fuzzer:
+
+Few More Points about Word Quick Fuzzer:
 ======================================
 1. Fuzzing Efficiency:
 To maximize fuzzing efficiency, Word is loaded once and the refresh is made using COM and symbolic links. Once crashed, Word will be relaunched and the process continues.
@@ -154,23 +159,23 @@ At the moment, the fuzzer is hybrid in the sense that it first generates all inp
 It operates in this way as I was having some issues utilizing a debugger alongside COM control, so we got COM control (at the input testing stage)  -> debugger control (at the crash analysis stage).
 
 
-viii) TODO
+TODO
 =======
 1. TODO: timeout mechanizm for the COM Update?
-2. ISSUE: A race condition occurs sometimes between COM and the debugger, causing the "Update" to do nothing. it's somehow related to Word loosing focus.
-3. TODO: create a not-responding guarding thread.
+2. ISSUE: A race condition occurs sometimes between COM and the debugger, causing the "Update" to do nothing. It's somehow related to Word loosing focus.
+3. TODO: create a "not-responding" guarding thread.
 4. TODO: Add workers for HTML/Image generation and feeding the queue. continous fuzzing.
-5. TODO: Add injection of refFile to supplied wordFile
-6. TODO: Improve HTML generation [incorporate in fuzzer process or continue in seperate process with different configuration]
+5. TODO: Add injection of refFile to supplied wordFile.
+6. TODO: Improve HTML generation [incorporate in fuzzer process or continue in seperate process with different configuration].
 
 
 
-ix)Author
+Author
 =============
 [Amit Dori](https://twitter.com/_AmitDori_), Security Researcher at Votiro.
 
 
-x) Inspiration for this tool
+Inspiration for this tool
 =========================
 - Based on [OpenXMolar]( https://github.com/debasishm89/OpenXMolar) by [Debasish Mandal](https://twitter.com/debasishm89)
 - [Domato](https://github.com/google/domato) by [Ivan Fratric](ifratric@google.com)
