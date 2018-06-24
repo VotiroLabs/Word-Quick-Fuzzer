@@ -145,7 +145,7 @@ The rest are predifined (but can be user supplied as well):
 Since MqF supports custom user files, you will be needing to take care to these features:
 1. create a document in Word, insert a Quick field of type INCLUDETEXT/INCLUDEPICTURE and point it to a non-existant html/image file path.
 - This non-existant file path should be provided to MqF in the "-r" argument, as it will be the generated symbolic link.
-2. Open the document with an archive unpacker and edit "word\document.xml": look for a tag containing "begin" and add w:dirty="true" -> it should look like this: ```xml<w:fldChar w:fldCharType="begin" w:dirty="true"/>```
+2. Open the document with an archive unpacker and edit "word\document.xml": look for a tag containing "begin" and add w:dirty="true" -> it should look like this: `<w:fldChar w:fldCharType="begin" w:dirty="true"/>`
 3. Exit the text editor and make sure the edits are saved to the document. now you can supply its path to MqF in the "-w" argument.
 
 
