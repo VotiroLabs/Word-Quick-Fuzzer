@@ -41,7 +41,7 @@ iv) Adding More POPUP / Errors Windows Handler
 
 The default PopUpKiller.py file provided with Word Quick Fuzzer, is having few most occurred pop up / error windows handler for MS Word, MS Excel & Power Point. Using AutoIT Window Info tool (https://www.autoitscript.com/site/autoit/downloads/) you can add more POPUP / Errors Windows Handlers into 'PopUpKiller.py'.
 
-[Example popup](https://github.com/VotiroLabs/Word-Quick-Fuzzer/popuphandler.PNG)
+![Example popup](https://github.com/VotiroLabs/Word-Quick-Fuzzer/blob/master/popuphandler.PNG)
 So to be able to Handle the error pop up window shown in screen shot, following lines need to be added in : PopUpKiller.py
 
 ```python
