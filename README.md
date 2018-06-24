@@ -56,7 +56,7 @@ MqF launches Word with this document and then starts updating its Quick field us
 - The reason I chose this method is that it enables to only load Word once, saving a lot of process time. 
 - The main thing to realize is that unlinke fuzzers that launch and close the program on each input, in MqF Word remains open and the document remains unchanged - the only thing that changes is the symbolic link, pointing to a new input each time.
 - The provided files contains an auto-updating Quick field, pointing to a symbolic link in the same directory. 
-- For best performance, make sure to disable "Safe mode" and "Protected View".
+- For best performance, make sure to disable "Safe mode" and "Protected View". At the very least, make sure the document is "trusted", so it won't open in "Protected View" - This can be achieved by opening it once and "Enabling Content" or editing it's ZoneIdentifier.
 
 If a crashing input was found, it will be copied for furhter analysis and Word will be relaunched to continue fuzzing.
 When all input files have been tested, we move on to the crash analysis phase where Word will be launched per crashing file, testing the crash and recording what happened.
