@@ -53,10 +53,10 @@ if "PowerPoint found a problem with content"  in autoit.win_get_text('Microsoft 
 v)How it works
 =============
 MqF launches Word with this document and then starts updating its Quick field using COM Update method.
-*The reason I chose this method is that it enables to only load Word once, saving a lot of process time. 
-**The main thing to realize is that unlinke fuzzers that launch and close the program on each input, in MqF Word remains open and the document remains unchanged - the only thing that changes is the symbolic link, pointing to a new input each time.
-***The provided files contains an auto-updating Quick field, pointing to a symbolic link in the same directory. 
-
+- The reason I chose this method is that it enables to only load Word once, saving a lot of process time. 
+- The main thing to realize is that unlinke fuzzers that launch and close the program on each input, in MqF Word remains open and the document remains unchanged - the only thing that changes is the symbolic link, pointing to a new input each time.
+- The provided files contains an auto-updating Quick field, pointing to a symbolic link in the same directory. 
+- For best performance, make sure to disable "Safe mode" and "Protected View".
 
 If a crashing input was found, it will be copied for furhter analysis and Word will be relaunched to continue fuzzing.
 When all input files have been tested, we move on to the crash analysis phase where Word will be launched per crashing file, testing the crash and recording what happened.
@@ -127,7 +127,7 @@ usage: ImageFuzzer [-h] [-w WORD_FILE] [-r REF_FILE] [-i INPUTS_DIR]
                    {analyze,fuzz} inputs_dir
 ImageFuzzer: error: too few arguments
 Basically, there are 2 modes of operation: analyze OR fuzz.
-In addition, an inputs folder needs to be defined.
+In addition, an inputs folder needs to be defined - Test this with [AFL generated images](http://lcamtuf.coredump.cx/afl/demo/).
 
 The rest are predifined (but can be user supplied as well):
 -w WORD_FILE: which Word file to use, could be any format that Word can parse.

@@ -330,7 +330,7 @@ if __name__ == "__main__":
     logger = setupLogger()
     parser = argparse.ArgumentParser(prog='ImageFuzzer', description="Fuzzing Word INCLUDEPICTURE Field image capabilities")
     parser.add_argument("operation", choices=['analyze','fuzz'], help="Operation mode: analyze or fuzz")
-    parser.add_argument("inputs_dir", nargs="?", default="./IMAGE_inputs/jpeg/full/images", help="Directory of input images")
+    parser.add_argument("inputs_dir", nargs="?", default="", help="Directory of input images")
     parser.add_argument("-w", "--word-file", help="Name of Word File to use")
     parser.add_argument("-r", "--ref-file", help="Name of Symbolic link file to use")
     parser.add_argument("-i","--inputs-dir", help="Directory of input images")
