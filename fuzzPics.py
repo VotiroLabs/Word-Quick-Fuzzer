@@ -53,6 +53,7 @@ if 'PROGRAMFILES(X86)' in os.environ:
 else:
     PROG_NAME = "C:\\Program Files\\Microsoft Office\\root\\Office{0}\\{1}".format(OFFICE_VERSION, IMAGE_NAME)
 
+PROG_ARGUMENTS = "/q"
 crash_dir = os.getcwd() + "\\IMAGES_crashes\\"
 wordFile = os.getcwd() + "\\includepicture.docx"
 refFile = os.getcwd() + "\\1.jpg"
@@ -135,19 +136,6 @@ def StillRunningWINAPPDBG(proc):
     except:
         ForceKillOffice()
         
-def startWord(wordFile):
-    ''' 
-    starting a Word process with a wordFile as input
-    Currently not in use
-    '''
-    
-    cmd = [PROG_NAME, wordFile]
-    debug = Debug(AccessViolationHandlerWINAPPDBG, bKillOnExit = True )
-    proc = debug.execv(cmd)
-    debug.loop()
-
-
-        
 def pretty_print(count, char):
     if count == 1:
         print  '0: {1}'.format(count,char),
@@ -184,7 +172,7 @@ def launchWord(queue):
     word = win32com.client.DispatchEx("word.Application")
     logger.debug('[+]',datetime.now().strftime("%Y:%m:%d::%H:%M:%S"),'Using debugger : ',DEBUGGER)
     #wordGuard_tid = thread.start_new_thread(wordGuard, ())
-    cmd = [PROG_NAME, wordFile]
+    cmd = [PROG_NAME, PROG_ARGUMENTS, wordFile]
     debug = Debug(AccessViolationHandlerWINAPPDBG, bKillOnExit = True )
     proc = debug.execv(cmd)
     debug.loop()
@@ -259,7 +247,7 @@ def analyzeCrashes():
             curr_input = '{0}\\{1}'.format(crash_dir, file)
             logger.debug('[+] Generating symlink to {0}'.format(curr_input))
             symlink(curr_input, refFile)#make symbolic link
-            cmd = [PROG_NAME, wordFile]
+            cmd = [PROG_NAME, PROG_ARGUMENTS, wordFile]
             debug = Debug(AccessViolationHandlerWINAPPDBG, bKillOnExit = True )
             proc = debug.execv(cmd)
             wordGuard_tid = thread.start_new_thread(StillRunningWINAPPDBG, (proc,))
