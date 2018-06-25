@@ -68,6 +68,7 @@ Execution
 ===================
 This fuzzer is tested on 32 Bit and 64 Bit Windows Platforms (32 Bit Office Process). All the required libraries are distributed with this fuzzer in 'ExtDepLibs/' folder.
 
+Make sure you execute this in an administrator mode, so python will be able to create symbolic links!
 
 ~~~~
 python fuzzHTML.py

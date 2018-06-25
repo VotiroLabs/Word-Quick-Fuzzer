@@ -53,7 +53,7 @@ if 'PROGRAMFILES(X86)' in os.environ:
 else:
     PROG_NAME = "C:\\Program Files\\Microsoft Office\\root\\Office{0}\\{1}".format(OFFICE_VERSION, IMAGE_NAME)
 
-PROG_ARGUMENTS = "/q"
+#PROG_ARGUMENTS = "/q"
 crash_dir = os.getcwd() + "\\IMAGES_crashes\\"
 wordFile = os.getcwd() + "\\includepicture.docx"
 refFile = os.getcwd() + "\\1.jpg"
@@ -172,7 +172,9 @@ def launchWord(queue):
     word = win32com.client.DispatchEx("word.Application")
     logger.debug('[+]',datetime.now().strftime("%Y:%m:%d::%H:%M:%S"),'Using debugger : ',DEBUGGER)
     #wordGuard_tid = thread.start_new_thread(wordGuard, ())
-    cmd = [PROG_NAME, PROG_ARGUMENTS, wordFile]
+    #cmd = [PROG_NAME, PROG_ARGUMENTS, wordFile]
+    cmd = [PROG_NAME, wordFile]
+    #logger.debug('[+]',datetime.now().strftime("%Y:%m:%d::%H:%M:%S"),'Executing : ',cmd)
     debug = Debug(AccessViolationHandlerWINAPPDBG, bKillOnExit = True )
     proc = debug.execv(cmd)
     debug.loop()
@@ -247,8 +249,10 @@ def analyzeCrashes():
             curr_input = '{0}\\{1}'.format(crash_dir, file)
             logger.debug('[+] Generating symlink to {0}'.format(curr_input))
             symlink(curr_input, refFile)#make symbolic link
-            cmd = [PROG_NAME, PROG_ARGUMENTS, wordFile]
+            #cmd = [PROG_NAME, PROG_ARGUMENTS, wordFile]
+            cmd = [PROG_NAME, wordFile]
             debug = Debug(AccessViolationHandlerWINAPPDBG, bKillOnExit = True )
+            logger.debug('[+]',datetime.now().strftime("%Y:%m:%d::%H:%M:%S"),'Executing : ',cmd)
             proc = debug.execv(cmd)
             wordGuard_tid = thread.start_new_thread(StillRunningWINAPPDBG, (proc,))
             threads.append(wordGuard_tid)
@@ -275,7 +279,7 @@ def startFuzzing():
     logger.debug('[+] '+ datetime.now().strftime("%Y:%m:%d::%H:%M:%S") + ' Adding image inputs to queue..')
     for item in os.listdir(inputs_dir): q.put('{0}\\{1}'.format(inputs_dir,item))
     while not q.empty():
-        ForceKillOffice()
+        #ForceKillOffice()
         #DeleteOfficeHistorty()
         launchWord(q)
     if not os.path.exists(crash_dir):
