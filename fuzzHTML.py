@@ -78,7 +78,8 @@ def symlink(source, link_name):
                 raise ctypes.WinError()
         except Exception, e:
             logger.error('Could not create a symbolic link. please ensure Python has permissions to make symbolic links OR run the fuzzer with an administrator privileges', exc_info=True)
-            exit()     
+            exit()    
+	    return flags
             
 def DeleteOfficeHistorty():
     #Delete Office startup files (not in use).
@@ -111,13 +112,13 @@ def AccessViolationHandlerWINAPPDBG(event):
         violation_addr = hex(crash.registers['Eip'])
         thetime = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         exe_name =  event.get_process().get_filename().split('\\')[-1]
-        crashfilename = 'crash_'+'_'+ curr_input.split('fuzz-')[1] +'.'+curr_input.split('.')[-1]
+        crashfilename = 'crash_'+'_'+ curr_input.split('-')[1] +'.'+curr_input.split('.')[-1]
         synfilename = crash_dir+exe_name+'\\'+ violation_addr +'\\'+crashfilename + '.txt'
         if not os.path.exists(crash_dir+exe_name):
             os.makedirs(crash_dir+exe_name)
         if not os.path.exists(crash_dir+exe_name+'\\'+violation_addr):
             os.makedirs(crash_dir+exe_name+'\\'+violation_addr)
-        shutil.copyfile(curr_input,crash_dir+exe_name+'\\'+violation_addr+'\\'+curr_input.split('fuzz-')[1])
+        shutil.copyfile(curr_input,crash_dir+exe_name+'\\'+violation_addr+'\\'+curr_input.split('-')[1])
         logger.info('[+]',datetime.now().strftime("%Y:%m:%d::%H:%M:%S"),'BOOM!! APP Crashed :','Crash file Copied to ',(exe_name+'\\'+violation_addr+'\\'+crashfilename))
         syn = open(synfilename,'w')
         syn.write(details)
@@ -204,7 +205,8 @@ def launchWord(queue):
             curr_input = '{0}'.format(filename)
             exec_count += 1
             logger.debug('[+] Generating symlink to {0}'.format(curr_input))
-            symlink(curr_input, refFile)#make symbolic link
+            if symlink(curr_input, refFile)==1:#make symbolic link
+				continue #If it is a directory, continue
             
             try:
                 logger.debug('[+] Updating Word via COM')
@@ -221,13 +223,14 @@ def launchWord(queue):
                         pretty_print(exec_count,'!')
                         if not os.path.exists(crash_dir):
                             os.mkdir(crash_dir)
-                        os.system("cp {0} {1}/{2} > NUL".format(curr_input, crash_dir, curr_input.split('\\')[1]))
+                        os.system("cp {0} {1} > NUL".format(curr_input, crash_dir))
                         fail_count = -1
                     else:
                         logger.debug('[?] We have a hang?')
                         pretty_print(exec_count,'?')
                         ForceKillOffice()
                         fail_count = -1
+                        sleep(2)
                 except:
                     pass
             finally:
@@ -235,6 +238,7 @@ def launchWord(queue):
                 queue.task_done()
                 try:
                     os.remove(refFile)
+                    sleep(0.1)
                 except:
                     pass
         except Queue.Empty:
@@ -266,7 +270,8 @@ def analyzeCrashes():
                 continue
             curr_input = '{0}\\{1}'.format(crash_dir, file)
             logger.debug('[+] Generating symlink to {0}'.format(curr_input))
-            symlink(curr_input, refFile)#make symbolic link
+            if symlink(curr_input, refFile)==1:#make symbolic link
+			    continue
             #cmd = [PROG_NAME, PROG_ARGUMENTS, wordFile]
             cmd = [PROG_NAME, wordFile]
             logger.debug('[+]',datetime.now().strftime("%Y:%m:%d::%H:%M:%S"),'Executing : ',cmd)
